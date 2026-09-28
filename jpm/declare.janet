@@ -230,6 +230,7 @@
 (defn- find-shebang-janet
   "Find absolute path to janet executable for auto-shebang on Posix systems"
   []
+  (if (is-win-or-mingw) (break)) # avoid calling undefined programs
   (def binpath-check (string (dyn:binpath) "/janet"))
   (if (os/stat binpath-check :mode) (break (os/realpath binpath-check)))
   (def [ok selfexe] (protect (exec-slurp "which" (dyn *executable* "janet"))))
